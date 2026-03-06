@@ -119,7 +119,7 @@ function connect() {
     }
     if (data.type === "message") {
       saveMessage(data);
-      saveUser(data.from, data.name, data.avatar);
+      saveUser(data.from, data.name, data.avatar, user.online);
       if (data.from === currentChatUser) loadMessages();
     }
   };

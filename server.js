@@ -1,20 +1,15 @@
 const express = require("express");
-const https = require("https");
+const http = require("http");
 const WebSocket = require("ws");
 const { v4: uuidv4 } = require("uuid");
-const fs = require("fs");
 
 const app = express();
-const server = https.createServer({
-  key: fs.readFileSync("key.pem"),
-  cert: fs.readFileSync("cert.pem")
-}, app);
-
+const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
 
 app.use(express.static("public"));
 
-// تخزين كل المستخدمين
+// تخزين المستخدمين
 const users = new Map();
 
 function broadcastUsers() {
@@ -42,6 +37,7 @@ function broadcastUsers() {
   });
 
 }
+
 wss.on("connection", (ws) => {
 
   console.log("Client connected");
@@ -52,7 +48,7 @@ wss.on("connection", (ws) => {
 
     const message = JSON.parse(data);
 
-    // ================= AUTH =================
+    // ===== AUTH =====
     if (message.type === "auth") {
 
       currentClientId = message.clientId || uuidv4();
@@ -87,7 +83,7 @@ wss.on("connection", (ws) => {
       broadcastUsers();
     }
 
-    // ================= MESSAGE =================
+    // ===== MESSAGE =====
     if (message.type === "message") {
 
       const targetUser = users.get(message.to);
@@ -113,7 +109,11 @@ wss.on("connection", (ws) => {
 
   ws.on("close", () => {
 
-    if (currentClientId && users.has(currentClientId)) {const user = users.get(currentClientId); user.online = false; user.socket = null; users.get(currentClientId).online = false;
+    if (currentClientId && users.has(currentClientId)) {
+
+      const user = users.get(currentClientId);
+      user.online = false;
+      user.socket = null;
 
     }
 
@@ -126,6 +126,5 @@ wss.on("connection", (ws) => {
 const PORT = process.env.PORT || 3000;
 
 server.listen(PORT, () => {
-  console.log("Server running");
+  console.log("Server running on port", PORT);
 });
-
