@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Chat App</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="favicon.ico">
+</head>
+<body>
+
+<div id="usersScreen" class="screen active">
+  <div class="header">
+    My ID: <span id="myId"></span>
+  </div>
+  <ul id="usersList"></ul>
+</div>
+
+<div id="chatScreen" class="screen">
+  <div class="header">
+    <button id="backBtn">⬅</button>
+    Chat with: <span id="chatWith"></span>
+  </div>
+  <div id="messages" class="messages"></div>
+  <div class="input-area">
+    <input type="text" id="messageInput" placeholder="Message">
+    <button id="sendBtn">Send</button>
+  </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
